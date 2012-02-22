@@ -11,10 +11,6 @@ from temporal.models.fields import TemporalForeignKey
 from temporal.models.trail import TemporalTrail
 
 
-#def temporal_period(obj):
-#    return '%s..%s' % (obj.date_begin.date(), obj.date_end and obj.date_end.date() or '')
-        
-
 class FakeDeleteQuerySet(QuerySet):
     ' QuerySet, не удаляющий данные физически '
     
