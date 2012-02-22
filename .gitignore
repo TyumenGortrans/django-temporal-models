@@ -2,8 +2,11 @@
 .pydevproject
 .settings
 
-*~
+build
+dist
+MANIFEST
 
+*~
 *.pyc
 *.pyo
 
