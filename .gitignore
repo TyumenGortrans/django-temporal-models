@@ -11,3 +11,6 @@ MANIFEST
 *.pyo
 
 *.sqlite
+
+example/temporal
+example/local_settings.py
