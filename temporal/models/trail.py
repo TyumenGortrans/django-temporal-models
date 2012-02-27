@@ -236,9 +236,18 @@ def _track_fields(track_fields=None, unprocessed=False):
 
 def _fill_date_end(obj):
     try:
-        prev = obj.get_previous_by_date_begin()
-        prev.date_end = obj.date_begin - timedelta(1)
-        prev.save()
+        prev_obj = obj.get_previous_by_date_begin()
+        prev_obj.date_end = obj.date_begin - timedelta(1)
+        prev_obj.save()
+    except obj.DoesNotExist:
+        pass
+    except:
+        raise
+
+    try:
+        next_obj = obj.get_next_by_date_begin()
+        obj.date_end = next_obj.date_begin - timedelta(1)
+        obj.save()
     except obj.DoesNotExist:
         pass
     except:
