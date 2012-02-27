@@ -67,5 +67,3 @@ Django-temporal-models это темпоральные модели навеян
 >>>
 >>> person.get_actual(date(2011,10,1)).organization
 <OrganizationTemporal: Муниципальное учреждение пассажирского городского транспорта "Тюменьгортранс" as of 2004-07-01..2012-01-10>
-
-
