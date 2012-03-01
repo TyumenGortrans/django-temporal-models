@@ -68,7 +68,10 @@ class TemporalTrail(object):
                         kwargs['_temporal_change_type'] = 'D'
                 for field_arr in model._temporal_track:
                     kwargs[field_arr[0]] = _temporal_track(instance, field_arr)
-                _fill_date_end(model._default_manager.create(**kwargs))
+                if created:
+                    model._default_manager.create(**kwargs)
+                else:
+                    _fill_date_end(model._default_manager.create(**kwargs))
                 
             ## Uncomment this line for pre r8223 Django builds
             #dispatcher.connect(_audit, signal=models.signals.post_save, sender=cls, weak=False)
