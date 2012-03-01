@@ -5,6 +5,7 @@ from django.contrib.gis.db.models.query import GeoQuerySet as QuerySet
 from django.contrib.auth.models import User
 
 from django.db.models import Q
+from django.db import transaction
 from datetime import date
 
 from temporal.models.fields import TemporalForeignKey
@@ -44,7 +45,7 @@ class ActualModel(models.Model):
         '''
         fake delete
         '''
-        real_delete = kwargs.get('real_delete', False)
+        real_delete = kwargs.pop('real_delete', False)
         if not real_delete:
             self.deleted = True
             self.save()
@@ -63,10 +64,28 @@ class TemporalModel(ActualModel):
     date_begin = models.DateTimeField();
     date_end = models.DateTimeField(null=True, blank=True, editable=False);
 
+    def save(self, *args, **kwargs):
+        with transaction.commit_manually():
+            try:
+                super(TemporalModel, self).save(*args, **kwargs)
+            except:
+                transaction.rollback()
+                raise
+            else:
+                transaction.commit()
+
     def delete(self, *args, **kwargs):
-        kwargs['date_delete'] = kwargs.get('date_delete', date.today())
-        self.date_begin = kwargs['date_delete'] 
-        super(TemporalModel, self).delete(*args, **kwargs)
+        self.date_begin = kwargs.pop('date_delete', date.today()) 
+        with transaction.commit_manually():
+            try:
+                if kwargs.get('real_delete', False):
+                    self.history.all().delete()
+                super(TemporalModel, self).delete(*args, **kwargs)
+            except:
+                transaction.rollback()
+                raise
+            else:
+                transaction.commit()
 
     def get_actual(self, actual_date=None):
         return self.history.get_actual(actual_date)
