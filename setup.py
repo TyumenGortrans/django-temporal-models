@@ -4,7 +4,7 @@ import os
 from distutils.core import setup
 
 setup(
-    name='Django-temporal-models',
+    name='django-temporal-models',
     version='0.0.3',
     description='Implementation of supporting temporality in Django models',
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),

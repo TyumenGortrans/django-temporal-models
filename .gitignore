@@ -12,5 +12,6 @@ MANIFEST
 
 *.sqlite
 
+env
 example/temporal
 example/local_settings.py
